@@ -16,11 +16,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from enterprise import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('account/', include('allauth.urls')),
+    path('profile/<int:pk>/', views.Profile.as_view()),
+    path('editprofile/<int:pk>/', views.EditProfile.as_view()),
 
 ]
