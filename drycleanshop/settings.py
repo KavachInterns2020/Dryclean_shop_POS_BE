@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'rest_auth.registration',
     'users.apps.UsersConfig',
     'enterprise.apps.EnterpriseConfig',
+    'settings.apps.SettingsConfig',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
