@@ -16,14 +16,25 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from enterprise import views
+import enterprise.views
+import settings.views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('account/', include('allauth.urls')),
-    path('profile/<int:pk>/', views.Profile.as_view()),
-    path('editprofile/<int:pk>/', views.EditProfile.as_view()),
+    path('profile/<int:pk>/', enterprise.views.Profile.as_view()),
+    path('editprofile/<int:pk>/', enterprise.views.EditProfile.as_view()),
+    path('product-type/',settings.views.ProductTypeView.as_view()),
+    path('delete-product-type/<int:pk>/', settings.views.DeleteProductType.as_view()),
+    path('service-type/',settings.views.ServiceTypeView.as_view()),
+    path('delete-service-type/<int:pk>/', settings.views.DeleteServiceType.as_view()),
+    path('priority/',settings.views.PriorityView.as_view()),
+    path('delete-priority/<int:pk>/', settings.views.DeletePriority.as_view()),
+    path('rate/',settings.views.RateView.as_view()),
+    path('edit-rate/<int:pk>/', settings.views.EditRate.as_view()),
+
 
 ]

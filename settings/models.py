@@ -6,32 +6,63 @@ from enterprise.models import Enterprise
 
 
 class ProductType(models.Model):
+
+	class Meta:
+		verbose_name_plural = "Product types"
+
 	id=models.AutoField(primary_key=True)
 	product_type_name=models.CharField(max_length=100,blank=True)
-	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='product')
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='product',blank=True,null=True)
 
 	objects=CustomUserManager()
 
+	def __str__(self):
+		return f"{self.id}- {self.product_type_name} {self.enterprise}"
+
 class ServiceType(models.Model):
+
+	class Meta:
+		verbose_name_plural = "Service types"
+
 	id=models.AutoField(primary_key=True)
 	
 	service_type_name=models.CharField(max_length=100,blank=True)
-	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='service')
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='service',blank=True,null=True)
 	objects=CustomUserManager()
 
+	def __str__(self):
+		return f"{self.id}- {self.service_type_name} {self.enterprise}"
+
+
 class Priority(models.Model):
+
+	class Meta:
+		verbose_name_plural = "Priorities"
+
 	id=models.AutoField(primary_key=True)
 	
 	priority_name=models.CharField(max_length=100,blank=True)
-	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='priority')
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='priority',blank=True,null=True)
 	objects=CustomUserManager()
+
+	def __str__(self):
+		return f"{self.id}- {self.priority_name} {self.enterprise}"
+
 
 class Rate(models.Model):
+
+	class Meta:
+		verbose_name_plural = "Rates"
+
 	id=models.AutoField(primary_key=True)
 	price=models.DecimalField(max_digits=6,decimal_places=2,blank=True)
-	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='rate')
-	product=models.ForeignKey(ProductType,on_delete=models.CASCADE,related_name='product')
-	service=models.ForeignKey(ServiceType,on_delete=models.CASCADE,related_name='service')
-	priority=models.ForeignKey(Priority,on_delete=models.CASCADE,related_name='priority')
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='rate',blank=True,null=True)
+	product=models.ForeignKey(ProductType,on_delete=models.CASCADE,related_name='product',blank=True,null=True)
+	service=models.ForeignKey(ServiceType,on_delete=models.CASCADE,related_name='service',blank=True,null=True)
+	priority=models.ForeignKey(Priority,on_delete=models.CASCADE,related_name='priority',blank=True,null=True)
 
 	objects=CustomUserManager()
+
+	def __str__(self):
+		return f"{self.id}  {self.product} {self.service} {self.priority} {self.price}{self.enterprise}"
+
