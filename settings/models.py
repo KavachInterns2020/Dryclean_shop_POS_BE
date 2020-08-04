@@ -66,3 +66,28 @@ class Rate(models.Model):
 	def __str__(self):
 		return f"{self.id}  {self.product} {self.service} {self.priority} {self.price}{self.enterprise}"
 
+class PaymentModes(models.Model):
+
+	class Meta:
+		verbose_name_plural="Payment modes"
+
+	id=models.AutoField(primary_key=True)
+	payment_mode_name=models.CharField(max_length=50)
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='payment_mode',null=True,blank=True)
+	objects=CustomUserManager()
+
+	def __str__(self):
+		return f"{self.id}  {self.payment_mode_name}"
+
+class Status(models.Model):
+	class Meta:
+		verbose_name_plural="Status"
+
+	id=models.AutoField(primary_key=True)
+	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='status',null=True,blank=True)
+	status_name=models.CharField(max_length=100)
+
+	def __str__(self):
+		return f"{self.id} {self.status_name}"
+
+
