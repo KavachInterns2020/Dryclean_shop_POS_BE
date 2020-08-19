@@ -45,9 +45,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_auth.registration',
+    'phone_field',
     'users.apps.UsersConfig',
     'enterprise.apps.EnterpriseConfig',
     'settings.apps.SettingsConfig',
+    'customers.apps.CustomersConfig',
+    'employees.apps.EmployeesConfig',
+    'orders',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

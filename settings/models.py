@@ -57,9 +57,9 @@ class Rate(models.Model):
 	id=models.AutoField(primary_key=True)
 	price=models.DecimalField(max_digits=6,decimal_places=2,blank=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='rate',blank=True,null=True)
-	product=models.ForeignKey(ProductType,on_delete=models.CASCADE,related_name='product',blank=True,null=True)
-	service=models.ForeignKey(ServiceType,on_delete=models.CASCADE,related_name='service',blank=True,null=True)
-	priority=models.ForeignKey(Priority,on_delete=models.CASCADE,related_name='priority',blank=True,null=True)
+	product=models.ForeignKey(ProductType,on_delete=models.CASCADE,related_name='rate',blank=True,null=True)
+	service=models.ForeignKey(ServiceType,on_delete=models.CASCADE,related_name='rate',blank=True,null=True)
+	priority=models.ForeignKey(Priority,on_delete=models.CASCADE,related_name='rate',blank=True,null=True)
 
 	objects=CustomUserManager()
 
@@ -89,5 +89,6 @@ class Status(models.Model):
 
 	def __str__(self):
 		return f"{self.id} {self.status_name}"
+		
 
 

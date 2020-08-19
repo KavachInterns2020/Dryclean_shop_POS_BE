@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 import enterprise.views
 import settings.views
+import customers.views
+import orders.views
+import employees.views
 
 
 urlpatterns = [
@@ -35,6 +38,15 @@ urlpatterns = [
     path('delete-priority/<int:pk>/', settings.views.DeletePriority.as_view()),
     path('rate/',settings.views.RateView.as_view()),
     path('edit-rate/<int:pk>/', settings.views.EditRate.as_view()),
+    path('customer/',customers.views.CustomerView.as_view()),
+    path('edit-customer/<int:pk>/',customers.views.EditCustomerView.as_view()),
+    path('order/',orders.views.OrderView.as_view()),
+    path('order/order-item/',orders.views.OrderItemView.as_view()),
+    path('order/order-item/edit-order-item/',orders.views.EditOrderItemView.as_view()),
+    path('employees/',employees.views.EmployeeView.as_view()),
+    path('edit-employee/<int:pk>/',employees.views.EditEmployeeView.as_view()),
+    
+
 
 
 ]
