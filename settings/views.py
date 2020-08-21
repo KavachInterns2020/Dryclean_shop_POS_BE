@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from settings.models import ProductType,ServiceType,Priority,Rate
-from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer,RateSerializer
+from settings.models import ProductType,ServiceType,Priority
+from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -96,35 +96,4 @@ class DeletePriority(LoginRequiredMixin,APIView):
 		priority = self.get_object(pk)
 		priority.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
-
-class RateView(LoginRequiredMixin,APIView):
-	
-
-	def get(self, request, format=None):
-		rates = Rate.objects.all()
-		serializer = RateSerializer(rates, many=True)
-		return Response(serializer.data)
-
-	def post(self, request, format=None):
-		serializer=RateSerializer(data=request.data)
-		if serializer.is_valid():
-		    serializer.save()
-		    return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class EditRate(LoginRequiredMixin,APIView):
-
-	def get_object(self,pk):
-		try:
-			return Rate.objects.get(pk=pk)
-		except ServiceType.DoesNotExist:
-			raise Http404
-
-	def put(self, request, pk, format=None):
-	    rate = self.get_object(pk)
-	    serializer = RateSerializer(rate, data=request.data)
-	    if serializer.is_valid():
-	        serializer.save()
-	        return Response(serializer.data)
-	    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

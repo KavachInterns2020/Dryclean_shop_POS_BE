@@ -13,7 +13,7 @@ class ProductType(models.Model):
 	id=models.AutoField(primary_key=True)
 	product_type_name=models.CharField(max_length=100,blank=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='product',blank=True,null=True)
-
+	price=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True)
 	objects=CustomUserManager()
 
 	def __str__(self):
@@ -28,6 +28,7 @@ class ServiceType(models.Model):
 	
 	service_type_name=models.CharField(max_length=100,blank=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='service',blank=True,null=True)
+	price=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True)
 	objects=CustomUserManager()
 
 	def __str__(self):
@@ -43,13 +44,14 @@ class Priority(models.Model):
 	
 	priority_name=models.CharField(max_length=100,blank=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='priority',blank=True,null=True)
+	price=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True)
 	objects=CustomUserManager()
 
 	def __str__(self):
 		return f"{self.id}- {self.priority_name} {self.enterprise}"
 
 
-class Rate(models.Model):
+'''class Rate(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Rates"
@@ -64,7 +66,7 @@ class Rate(models.Model):
 	objects=CustomUserManager()
 
 	def __str__(self):
-		return f"{self.id}  {self.product} {self.service} {self.priority} {self.price}{self.enterprise}"
+		return f"{self.id}  {self.product} {self.service} {self.priority} {self.price} {self.enterprise}"'''
 
 class PaymentModes(models.Model):
 

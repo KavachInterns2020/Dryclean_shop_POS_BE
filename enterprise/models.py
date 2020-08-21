@@ -11,7 +11,7 @@ class Enterprise(models.Model):
 	contact_name=models.CharField(max_length=200)
 	phone=models.CharField(max_length=10)
 	shop_name=models.CharField(max_length=200)
-	gst_number=models.CharField(max_length=20,unique=True)
+	gst_number=models.CharField(max_length=20)
 	shop_address=models.CharField(max_length=400)
 	#shop_photo=models.ImageField(upload_to='images/')
 	created_at = models.DateTimeField(auto_now_add=True)

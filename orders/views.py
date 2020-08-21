@@ -22,12 +22,13 @@ class OrderView(LoginRequiredMixin,APIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderItemView(LoginRequiredMixin,APIView):
-	def get(self, request, format=None):
+	
+	def get(self, request, pk,format=None):
 		orderitems = OrderItem.objects.all()
-		serializer = OrderSerializer(orderitems, many=True)
+		serializer = OrderItemSerializer(orderitems, many=True)
 		return Response(serializer.data)
 
-	def post(self,request,format=None):
+	def post(self,request,pk,format=None):
 		serializer=OrderItemSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
@@ -36,13 +37,13 @@ class OrderItemView(LoginRequiredMixin,APIView):
 
 class EditOrderItemView(LoginRequiredMixin,APIView):
 
-	def get_object(self, pk):
+	def get_object(self,request, pk,format=None):
 	    try:
-	        return OrderItem.objects.get(pk=pk)
+	        return OrderItem.objects.get(pk=pk2)
 	    except OrderItem.DoesNotExist:
 	        raise Http404
 
-	def put(self, request, pk, format=None):
+	def put(self, request, format=None):
 	    orderitem = self.get_object(pk)
 	    serializer = OrderItemSerializer(rate, data=request.data)
 	    if serializer.is_valid():
@@ -50,7 +51,7 @@ class EditOrderItemView(LoginRequiredMixin,APIView):
 	        return Response(serializer.data)
 	    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	def delete(self, request, pk, format=None):
+	def delete(self, request, format=None):
 		orderitem = self.get_object(pk)
 		orderitem.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)

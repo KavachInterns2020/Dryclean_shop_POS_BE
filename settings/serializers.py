@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import ProductType,ServiceType,Priority,Rate
+from .models import ProductType,ServiceType,Priority
 
 class ProductTypeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=ProductType
-		fields=['id','product_type_name']
+		fields=['id','product_type_name','price']
 
 class ServiceTypeSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -16,7 +16,3 @@ class PrioritySerializer(serializers.ModelSerializer):
 		model=Priority
 		fields='__all__'
 
-class RateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model=Rate
-		fields='__all__'
