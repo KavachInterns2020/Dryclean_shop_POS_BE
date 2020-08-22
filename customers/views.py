@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from customers.models import Customer
-from customers.serializers import CustomerSerializer
+from customers.serializers import CustomerSerializer,CustomerCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import rest_framework.mixins
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from rest_framework import generics
+from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 class CustomerView(LoginRequiredMixin,APIView):
 
@@ -16,10 +17,20 @@ class CustomerView(LoginRequiredMixin,APIView):
 		serializer = CustomerSerializer(customer, many=True)
 		return Response(serializer.data)
 
-	def post(self,request,format=None):
-		serializer=CustomerSerializer(data=request.data)
+
+class CustomerCreateView(generics.CreateAPIView):
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return CustomerCreateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+		
+		
 		if serializer.is_valid():
-			serializer.save()
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

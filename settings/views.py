@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 import rest_framework.mixins
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from rest_framework import generics
+from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 class ProductTypeView(LoginRequiredMixin,APIView):
 
@@ -16,10 +17,20 @@ class ProductTypeView(LoginRequiredMixin,APIView):
 		serializer = ProductTypeSerializer(products, many=True)
 		return Response(serializer.data)
 
-	def post(self,request,format=None):
-		serializer=ProductTypeSerializer(data=request.data)
+
+class ProductTypeCreateView(generics.CreateAPIView):
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return ProductTypeSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+	
+		
 		if serializer.is_valid():
-			serializer.save()
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,13 +56,23 @@ class ServiceTypeView(LoginRequiredMixin,APIView):
 		serializer = ServiceTypeSerializer(services, many=True)
 		return Response(serializer.data)
 
-	def post(self,request,format=None):
-		serializer=ServiceTypeSerializer(data=request.data)
-		if serializer.is_valid():
-		    serializer.save()
-		    return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	
 
+class ServiceTypeCreateView(generics.CreateAPIView):
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return ServiceTypeSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+	
+		
+		if serializer.is_valid():
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteServiceType(LoginRequiredMixin,APIView):
 
@@ -76,12 +97,20 @@ class PriorityView(LoginRequiredMixin,APIView):
 		return Response(serializer.data)
 
 
+class PriorityCreateView(generics.CreateAPIView):
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return PrioritySerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
 	
-	def post(self,request,format=None):
-		serializer=PrioritySerializer(data=request.data)
+		
 		if serializer.is_valid():
-		    serializer.save()
-		    return Response(serializer.data, status=status.HTTP_201_CREATED)
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeletePriority(LoginRequiredMixin,APIView):

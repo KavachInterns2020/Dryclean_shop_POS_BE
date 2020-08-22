@@ -11,17 +11,20 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-
-	
+class OrderItemCreateSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model=OrderItem
 		fields=['id','quantity','total_amount','collection_date','expected_delivery_date',
-		'actual_delivery_date','pickup_date','order','enterprise','product_type','service_type','priority']
+		'actual_delivery_date','pickup_date','product_type','service_type','priority']
 	
 	
 
+class OrderItemSerializer(serializers.ModelSerializer):
+	class Meta:
+		model=OrderItem
+		fields=['id','order','quantity','total_amount','collection_date','expected_delivery_date',
+		'actual_delivery_date','pickup_date','enterprise','product_type','service_type','priority']
 
 
        

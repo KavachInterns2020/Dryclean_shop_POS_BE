@@ -14,6 +14,10 @@ class Role(models.Model):
 	id=models.AutoField(primary_key=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='role',blank=True,null=True)
 	role_name=models.CharField(max_length=100)
+	objects=CustomUserManager()
+
+	def __str__(self):
+		return f"{self.id} {self.enterprise} {self.role_name}"
 
 class Employee(models.Model):
 

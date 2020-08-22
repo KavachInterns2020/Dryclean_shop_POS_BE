@@ -1,18 +1,19 @@
 from django.shortcuts import render
-from employees.models import Employee
-from employees.serializers import EmployeeSerializer
+from employees.models import Employee,Role
+from employees.serializers import EmployeeSerializer,EmployeeCreateSerializer,RoleSerializer,RoleCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import rest_framework.mixins
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from rest_framework import generics
+from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 class EmployeeView(LoginRequiredMixin,APIView):
 
 	def get(self, request, format=None):
 		employee = Employee.objects.all()
-		serializer = CustomerSerializer(employee, many=True)
+		serializer = EmployeeSerializer(employee, many=True)
 		return Response(serializer.data)
 
 	def post(self,request,format=None):
@@ -21,6 +22,23 @@ class EmployeeView(LoginRequiredMixin,APIView):
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EmployeeCreateView(generics.CreateAPIView):
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return EmployeeCreateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+		
+		
+		if serializer.is_valid():
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class EditEmployeeView(LoginRequiredMixin,APIView):
 	def get_object(self, pk):
@@ -42,7 +60,27 @@ class EditEmployeeView(LoginRequiredMixin,APIView):
 		employee.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
+class RoleView(LoginRequiredMixin,APIView):
+	def get(self, request, format=None):
+		role = Role.objects.all()
+		serializer = RoleSerializer(, many=True)
+		return Response(serializer.data)
 
-	
+class RoleCreateView(generics.CreateAPIView):
+
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return RoleCreateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+		
+		
+		if serializer.is_valid():
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 	
 

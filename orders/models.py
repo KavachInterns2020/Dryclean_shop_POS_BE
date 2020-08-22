@@ -66,8 +66,8 @@ class OrderItem(models.Model):
 	quantity=models.IntegerField(blank=True,null=True)
 	collection_date=models.DateField()
 	expected_delivery_date=models.DateField()
-	actual_delivery_date=models.DateField()
-	pickup_date=models.DateField()
+	actual_delivery_date=models.DateField(blank=True,null=True)
+	pickup_date=models.DateField(blank=True,null=True)
 	
 	
 	
@@ -77,6 +77,11 @@ class OrderItem(models.Model):
 	@property
 	def total_amount(self):
 		return (self.product_type.price+ self.service_type.price+ self.priority.price)* self.quantity
+	
+	
+	
+	
+
 	objects=CustomUserManager()
 	def __str__(self):
 		return f"{self.id} {self.enterprise}"
