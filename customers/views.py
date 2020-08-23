@@ -34,7 +34,8 @@ class CustomerCreateView(generics.CreateAPIView):
 			
 			obj=serializer.save(enterprise=self.request.user.enterprise)
 			subject=f"Welcome to {self.request.user.enterprise.shop_name}"
-			message=f"Dear {obj.customer_name}\n Thank you for choosing our services.\n You can track your orders by clicking on the link"
+			message=f"Dear {obj.customer_name}\n Thank you for choosing our services.\n You can track your orders by clicking on the link\n"
+			message+= '<a href="https://google.com/">'
 			from_email=self.request.user.email
 			to_list=[obj.customer_email]
 			send_mail(subject,message,from_email,to_list,fail_silently=False)
