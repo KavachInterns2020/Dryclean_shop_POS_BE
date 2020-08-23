@@ -4,8 +4,6 @@ from enterprise.models import Enterprise
 from customers.models import Customer
 from employees.models import Employee
 from settings.models import ProductType,ServiceType,Priority,Status
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 # Create your models here.
 
@@ -36,7 +34,10 @@ class Order(models.Model):
 
 	@property
 	def pending_amount(self):
-		pending=self.total_amount-self.advance_amount
+		if self.total_amount!=0:
+			pending=self.total_amount-self.advance_amount
+		else:
+			pending=0.00
 		
 
 		return pending

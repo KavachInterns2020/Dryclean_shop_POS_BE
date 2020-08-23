@@ -5,6 +5,8 @@ from settings.models import ProductType,ServiceType,Priority,PaymentModes,Status
 from customers.models import Customer
 from employees.models import Employee,Role
 from orders.models import Order,OrderItem
+from logs.models import Logs
+from workshops.models import Workshop
 admin.site.register(CustomUser)
 admin.site.register(Enterprise)
 admin.site.register(ProductType)
@@ -17,3 +19,5 @@ admin.site.register(Employee)
 admin.site.register(Role)
 admin.site.register(Order)
 admin.site.register(OrderItem)
+admin.site.register(Logs)
+admin.site.register(Workshop)

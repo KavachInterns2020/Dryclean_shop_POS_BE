@@ -1,7 +1,7 @@
 from django.db import models
 from users.managers import CustomUserManager
 from enterprise.models import Enterprise
-from phone_field import PhoneField
+
 
 # Create your models here.
 class Role(models.Model):
@@ -29,7 +29,7 @@ class Employee(models.Model):
 	role=models.ForeignKey(Role,on_delete=models.CASCADE,related_name='employee',blank=True,null=True)
 	employee_name=models.CharField(max_length=100)
 	employee_email=models.EmailField(null=True,blank=True,unique=True)
-	employee_phone=PhoneField(blank=True, help_text='Contact phone number',E164_only=False,unique=True)
+	employee_phone=models.CharField(null=True,blank=True,max_length=13)
 	employee_address=models.CharField(max_length=200)
 
 	objects=CustomUserManager()

@@ -9,6 +9,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
+class OrderCreateSerializer(serializers.ModelSerializer):
+	class Meta:
+		model=Order
+		fields=['customer','employee','advance_amount']
 
 
 class OrderItemCreateSerializer(serializers.ModelSerializer):

@@ -63,7 +63,7 @@ class EditEmployeeView(LoginRequiredMixin,APIView):
 class RoleView(LoginRequiredMixin,APIView):
 	def get(self, request, format=None):
 		role = Role.objects.all()
-		serializer = RoleSerializer(, many=True)
+		serializer = RoleSerializer(role, many=True)
 		return Response(serializer.data)
 
 class RoleCreateView(generics.CreateAPIView):
