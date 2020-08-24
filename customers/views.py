@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import rest_framework.mixins
+from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -19,6 +20,13 @@ class CustomerView(LoginRequiredMixin,APIView):
 		customer = Customer.objects.all()
 		serializer = CustomerSerializer(customer, many=True)
 		return Response(serializer.data)
+
+class CustomerDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		customers=Customer.objects.filter(id=pk)
+		serializer = CustomerSerializer(customers,many=True)
+		return Response(serializer.data)
+
 
 
 class CustomerCreateView(generics.CreateAPIView):
@@ -44,25 +52,16 @@ class CustomerCreateView(generics.CreateAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class EditCustomerView(LoginRequiredMixin, APIView):
-	def get_object(self, pk):
-		try:
-		    return Customer.objects.get(pk=pk)
-		except Customer.DoesNotExist:
-		    raise Http404
+class EditCustomerView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = Customer.objects.all()
+	serializer_class = CustomerSerializer
 
-	def put(self, request, pk, format=None):
-	    customer = self.get_object(pk)
-	    serializer = CustomerSerializer(customer, data=request.data)
-	    if serializer.is_valid():
-	        serializer.save()
-	        return Response(serializer.data)
-	    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
 
-	def delete(self, request, pk, format=None):
-		customer = self.get_object(pk)
-		customer.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
+
 
 
 	
