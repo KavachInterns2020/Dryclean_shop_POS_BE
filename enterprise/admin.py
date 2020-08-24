@@ -4,7 +4,7 @@ from .models import Enterprise
 from settings.models import ProductType,ServiceType,Priority,PaymentModes,Status
 from customers.models import Customer
 from employees.models import Employee,Role
-from orders.models import Order,OrderItem
+from orders.models import Order,OrderItem,StatusHistory
 from logs.models import Logs
 from workshops.models import Workshop
 admin.site.register(CustomUser)
@@ -21,3 +21,4 @@ admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(Logs)
 admin.site.register(Workshop)
+admin.site.register(StatusHistory)

@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from orders.models import Order,OrderItem
-from orders.serializers import OrderSerializer,OrderCreateSerializer,OrderItemSerializer,OrderItemCreateSerializer
+from customers.models import Customer
+from orders.models import Order,OrderItem,StatusHistory
+from orders.serializers import OrderSerializer,OrderCreateSerializer,OrderItemSerializer,OrderItemCreateSerializer,OrderItemEditSerializer,StatusHistorySerializer,StatusHistoryUpdateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,21 +11,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin,ListModelMixin
 
 # Create your views here.
-class OrderView(LoginRequiredMixin,APIView):
+class OrderView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	queryset = Order.objects.all()
+	serializer_class = OrderSerializer
 
-	def get(self, request, format=None):
-		orders = Order.objects.all()
-		serializer = OrderSerializer(orders, many=True)
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
+
+
+class OrderDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		
+		#pk = self.kwargs.get('pk')
+		orderitems=Order.objects.filter(id=pk)
+
+		serializer = OrderSerializer(orderitems,many=True)
+
+		
 		return Response(serializer.data)
 
-	def post(self,request,format=None):
-		serializer=OrderSerializer(data=request.data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderCreateView(generics.CreateAPIView):
@@ -43,7 +51,15 @@ class OrderCreateView(generics.CreateAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = Order.objects.all()
+	serializer_class = OrderCreateSerializer
 
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
 
 class OrderItemView(LoginRequiredMixin,APIView):
 	
@@ -51,7 +67,18 @@ class OrderItemView(LoginRequiredMixin,APIView):
 		
 		#pk = self.kwargs.get('pk')
 		orderitems=OrderItem.objects.filter(order=pk)
+
+		serializer = OrderItemSerializer(orderitems,many=True)
+
 		
+		return Response(serializer.data)
+
+class OrderItemDetailView(LoginRequiredMixin,APIView):
+
+	def get(self, request,pk,pk_alt,format=None):
+		
+		#pk = self.kwargs.get('pk')
+		orderitems=OrderItem.objects.filter(order=pk,id=pk_alt)
 		serializer = OrderItemSerializer(orderitems,many=True)
 		return Response(serializer.data)
 
@@ -82,24 +109,51 @@ class OrderItemCreateView(generics.CreateAPIView):
 	
 
 		
-class EditOrderItemView(LoginRequiredMixin,APIView):
+class EditOrderItemView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = OrderItem.objects.all()
+	serializer_class = OrderItemEditSerializer
 
-	def get_object(self,request, pk,format=None):
-	    try:
-	        return OrderItem.objects.get(pk=pk2)
-	    except OrderItem.DoesNotExist:
-	        raise Http404
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
 
-	def put(self, request, format=None):
-	    orderitem = self.get_object(pk)
-	    serializer = OrderItemSerializer(rate, data=request.data)
-	    if serializer.is_valid():
-	        serializer.save()
-	        return Response(serializer.data)
-	    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)	
 
-	def delete(self, request, format=None):
-		orderitem = self.get_object(pk)
-		orderitem.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class StatusHistoryView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	queryset = StatusHistory.objects.all()
+	serializer_class = StatusHistorySerializer
+
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
+
+	
+
+class StatusHistoryUpdateView(generics.CreateAPIView):
+
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return StatusHistoryUpdateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+		
+		
+		if serializer.is_valid():
+			Orderitem_ = get_object_or_404(OrderItem, pk=self.kwargs.get('pk_alt'))
+			order_=get_object_or_404(Order,pk=self.kwargs.get('pk'))
+			#customer_=get_object_or_404(Customer,pk=order_.customer.id)
+			
+			serializer.save(enterprise=self.request.user.enterprise,order_item=Orderitem_,order=order_)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
 

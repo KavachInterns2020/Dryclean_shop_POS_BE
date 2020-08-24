@@ -94,14 +94,15 @@ class StatusHistory(models.Model):
 
 	id=models.AutoField(primary_key=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
+	order=models.ForeignKey(Order,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	order_item=models.ForeignKey(OrderItem,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	status=models.ForeignKey(Status,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
-	customer=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
+	#customer=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	quantity=models.IntegerField()
 	date_of_update=models.DateField()
 
 	objects=CustomUserManager()
 
 	def __str__(self):
-		return f"{self.id} {self.enterprise} {self.customer.customer_name}"
+		return f"{self.id} {self.enterprise}"
 

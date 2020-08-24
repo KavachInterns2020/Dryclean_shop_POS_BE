@@ -1,21 +1,24 @@
 from django.shortcuts import render
-from settings.models import ProductType,ServiceType,Priority
-from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer
+from settings.models import ProductType,ServiceType,Priority,Status
+from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer,StatusSerializer,StatusCreateSerializer
 from django.http import Http404
+import rest_framework.mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import rest_framework.mixins
+from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin,RetrieveModelMixin,ListModelMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
 from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
-class ProductTypeView(LoginRequiredMixin,APIView):
+class ProductTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
-	def get(self, request, format=None):
-		products = ProductType.objects.all()
-		serializer = ProductTypeSerializer(products, many=True)
-		return Response(serializer.data)
+	queryset = ProductType.objects.all()
+	serializer_class = ProductTypeSerializer
+
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
+
 
 
 class ProductTypeCreateView(generics.CreateAPIView):
@@ -34,27 +37,25 @@ class ProductTypeCreateView(generics.CreateAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DeleteProductType(LoginRequiredMixin,APIView):
-	def get_object(self, pk):
-	    try:
-	        return ProductType.objects.get(pk=pk)
-	    except ProductType.DoesNotExist:
-	        raise Http404
+class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = ProductType.objects.all()
+	serializer_class = ProductTypeSerializer
 
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)	
+
+
+
+class ServiceTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 	
-	def delete(self, request, pk, format=None):
-		product = self.get_object(pk)
-		product.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
+	queryset = ServiceType.objects.all()
+	serializer_class = ServiceTypeSerializer
 
-
-
-class ServiceTypeView(LoginRequiredMixin,APIView):
-	
-	def get(self, request, format=None):
-		services = ServiceType.objects.all()
-		serializer = ServiceTypeSerializer(services, many=True)
-		return Response(serializer.data)
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
 
 	
 
@@ -74,27 +75,26 @@ class ServiceTypeCreateView(generics.CreateAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DeleteServiceType(LoginRequiredMixin,APIView):
+class DeleteServiceType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = ServiceType.objects.all()
+	serializer_class = ServiceTypeSerializer
 
-	def get_object(self,pk):
-		try:
-			return ServiceType.objects.get(pk=pk)
-		except ServiceType.DoesNotExist:
-			raise Http404
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
 
-	def delete(self, request, pk, format=None):
-		service = self.get_object(pk)
-		service.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class PriorityView(LoginRequiredMixin,APIView):
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
+	
 	
 
-	def get(self,request,format=None):
-		priorities=Priority.objects.all()
-		serializer=PrioritySerializer(priorities, many=True)
-		return Response(serializer.data)
+
+class PriorityView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+
+	queryset = Priority.objects.all()
+	serializer_class = PrioritySerializer
+
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
 
 
 class PriorityCreateView(generics.CreateAPIView):
@@ -113,16 +113,56 @@ class PriorityCreateView(generics.CreateAPIView):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DeletePriority(LoginRequiredMixin,APIView):
+class DeletePriority(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = Priority.objects.all()
+	serializer_class = PrioritySerializer
 
-	def get_object(self,pk):
-		try:
-			return Priority.objects.get(pk=pk)
-		except ServiceType.DoesNotExist:
-			raise Http404
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
 
-	def delete(self, request, pk, format=None):
-		priority = self.get_object(pk)
-		priority.delete()
-		return Response(status=status.HTTP_204_NO_CONTENT)
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
+	
 
+class StatusView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	queryset = Status.objects.all()
+	serializer_class = StatusSerializer
+
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
+
+
+
+class StatusCreateView(generics.CreateAPIView):
+
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return StatusCreateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
+	
+		
+		if serializer.is_valid():
+			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+
+	queryset = Status.objects.all()
+	serializer_class = StatusCreateSerializer
+
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
+
+
+
+	
+			
+	    
