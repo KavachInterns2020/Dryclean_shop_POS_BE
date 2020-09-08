@@ -7,6 +7,7 @@ from employees.models import Employee,Role
 from orders.models import Order,OrderItem,StatusHistory
 from logs.models import Logs
 from workshops.models import Workshop
+
 admin.site.register(CustomUser)
 admin.site.register(Enterprise)
 admin.site.register(ProductType)

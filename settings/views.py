@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from settings.models import ProductType,ServiceType,Priority,Status
-from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer,StatusSerializer,StatusCreateSerializer
+from settings.models import ProductType,ServiceType,Priority,Status,PaymentModes
+from settings.serializers import ProductTypeSerializer,ServiceTypeSerializer,PrioritySerializer,StatusSerializer,StatusCreateSerializer,PaymentModeSerializer,PaymentModeCreateSerializer
 from django.http import Http404
 import rest_framework.mixins
 from rest_framework.views import APIView
@@ -162,7 +162,37 @@ class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gener
 		return self.destroy(request, *args, **kwargs)
 
 
+class PaymentModeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	queryset = PaymentModes.objects.all()
+	serializer_class = PaymentModeSerializer
 
+	def get(self, request,*args,**kwargs):
+		return self.list(request,*args,**kwargs)
+
+
+class PaymentModeCreateView(LoginRequiredMixin,generics.CreateAPIView):
+
+	def get_serializer_class(self):
+	    if self.request.user.is_authenticated:
+	        return PaymentModeCreateSerializer
+	    return Response(serializer.errors,status=Http404)
+
+	def perform_create(self, serializer, **kwargs):
 	
+		
+		if serializer.is_valid():
 			
+			serializer.save(enterprise=self.request.user.enterprise)
+			
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 	    
+class PaymentModeEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	queryset = PaymentModes.objects.all()
+	serializer_class = PaymentModeCreateSerializer
+
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)

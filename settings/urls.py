@@ -18,5 +18,8 @@ urlpatterns = [
     path('status/',settings.views.StatusView.as_view()),
     path('status/new/',settings.views.StatusCreateView.as_view()),
     path('status/<int:pk>/edit/',settings.views.StatusEditView.as_view()),
+    path('paymentmodes/',settings.views.PaymentModeView.as_view()),
+    path('paymentmodes/new/',settings.views.PaymentModeCreateView.as_view()),
+    path('paymentmodes/<int:pk>/edit/',settings.views.PaymentModeEditView.as_view())
 
     ]

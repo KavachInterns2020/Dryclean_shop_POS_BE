@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth.registration',
     'phone_field',
+    'corsheaders',
     'users.apps.UsersConfig',
     'enterprise.apps.EnterpriseConfig',
     'settings.apps.SettingsConfig',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'orders',
     'logs.apps.LogsConfig',
     'workshops.apps.WorkshopsConfig',
+    
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -62,16 +64,16 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-#ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-#ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
-#ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
 
 SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = 'example@gmail.com'
-EMAIL_HOST_PASSWORD = 'examplepassword'
+EMAIL_HOST_USER = 'prathimabhatm01@gmail.com'
+EMAIL_HOST_PASSWORD = 'chukkibabadolly123'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL=False
@@ -79,6 +81,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+    'LOGIN_SERIALIZER': 'users.serializers.CustomLoginSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -88,6 +91,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 ACCOUNT_ADAPTER = 'users.adapter.CustomAccountAdapter'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -166,3 +170,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_WHITELIST= [
+    "http://127.0.0.1:3000"
+
+]

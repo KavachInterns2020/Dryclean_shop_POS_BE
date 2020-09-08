@@ -1,0 +1,55 @@
+.jumbotron{
+    color:#2c3e50;
+    background-color: #ecf0f1;
+}
+.navbar-inverse{
+    background: #2c3e50;;
+}
+.navbar-inverse .navbar-nav>li>a{
+ color:white;
+}
+.navbar-inverse .navbar-nav>li>a:hover{
+ color:aqua;
+}
+.navbar-inverse .navbar-brand{
+ color:white;
+}
+
+select{
+    width: 150px;
+    margin: 10px;
+}
+select:focus{
+    min-width: 150px;
+    width: auto;
+}
+#main{
+	background-image: url('./login1.jpg');
+	background-size: cover;
+	height: 100%;
+	position: relative;
+}
+em{
+    color:greenyellow
+}
+label{
+    color:rebeccapurple;
+    font-size: medium;
+}
+.one{
+    border-style: double;
+    border-width: 3px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-color:red;
+    padding-top: 10%;
+    background-image: url('./glass.jpg');
+	background-size: cover;
+	
+	position: relative;
+}
+
+#content-2{
+    display: none;
+}
+

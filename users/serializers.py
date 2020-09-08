@@ -5,6 +5,7 @@ from users.models import CustomUser
 from enterprise.models import Enterprise
 from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
+from rest_auth.serializers import LoginSerializer
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -13,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email']
 
 class CustomRegisterSerializer(RegisterSerializer):
+	
 	contact_name=serializers.CharField(max_length=200,default="none")
 	phone=serializers.CharField(max_length=10,default="9999999999")
 	shop_name=serializers.CharField(max_length=200,default="none")
@@ -22,7 +24,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 	
 	def get_cleaned_data(self):
 	    return{
-	    	'username':self.validated_data.get('username', ''),
+	    	
 	    	'password1':self.validated_data.get('password1', ''),
         	'email':self.validated_data.get('email', ''),
 	        'contact_name':self.validated_data.get('contact_name', ''),
@@ -31,3 +33,12 @@ class CustomRegisterSerializer(RegisterSerializer):
 	        'gst_number':self.validated_data.get('gst_number', ''),
 	        'shop_address':self.validated_data.get('shop_address', '')
 	    }
+
+class CustomLoginSerializer(LoginSerializer):
+	def get_cleaned_data(self):
+		return{
+		
+		'password':self.validated_data.get('password', ''),
+		'email':self.validated_data.get('email', '')
+
+		}

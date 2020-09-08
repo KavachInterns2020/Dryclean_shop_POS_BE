@@ -15,7 +15,9 @@ from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin,ListModelMi
 
 # Create your views here.
 class OrderView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	queryset = Order.objects.all()
+	def get_queryset(self):
+		return self.request.user.enterprise.order.all()
+	#queryset=Order.objects.all()
 	serializer_class = OrderSerializer
 
 	def get(self, request,*args,**kwargs):
@@ -23,12 +25,15 @@ class OrderView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
 
 class OrderDetailView(LoginRequiredMixin,APIView):
+
 	def get(self, request,pk,format=None):
 		
+		queryset=self.request.user.enterprise.order.filter(id=pk)
+		
 		#pk = self.kwargs.get('pk')
-		orderitems=Order.objects.filter(id=pk)
+		#orderitems=Order.objects.filter(id=pk)
 
-		serializer = OrderSerializer(orderitems,many=True)
+		serializer = OrderSerializer(queryset,many=True)
 
 		
 		return Response(serializer.data)
@@ -52,10 +57,13 @@ class OrderCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Order.objects.all()
+	def get_queryset(self):
+		queryset=self.request.user.enterprise.order.all()
+		return queryset
 	serializer_class = OrderCreateSerializer
 
 	def put(self, request, *args, **kwargs):
+		
 		return self.update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
@@ -66,7 +74,8 @@ class OrderItemView(LoginRequiredMixin,APIView):
 	def get(self, request,pk,format=None):
 		
 		#pk = self.kwargs.get('pk')
-		orderitems=OrderItem.objects.filter(order=pk)
+		#orders=self.request.user.enterprise.order.filter(id=pk)
+		orderitems=self.request.user.enterprise.orderitem.filter(order=pk)
 
 		serializer = OrderItemSerializer(orderitems,many=True)
 
@@ -78,7 +87,7 @@ class OrderItemDetailView(LoginRequiredMixin,APIView):
 	def get(self, request,pk,pk_alt,format=None):
 		
 		#pk = self.kwargs.get('pk')
-		orderitems=OrderItem.objects.filter(order=pk,id=pk_alt)
+		orderitems=self.request.user.enterprise.orderitem.filter(order=pk,id=pk_alt)
 		serializer = OrderItemSerializer(orderitems,many=True)
 		return Response(serializer.data)
 
