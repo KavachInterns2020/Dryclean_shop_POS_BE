@@ -5,14 +5,14 @@ class OrderSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model=Order
-		fields=['id','enterprise','customer','employee','total_amount','advance_amount','pending_amount']
+		fields=['id','enterprise','customer','total_amount','advance_amount','pending_amount']
 
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Order
-		fields=['customer','employee','advance_amount']
+		fields=['customer','advance_amount']
 
 
 

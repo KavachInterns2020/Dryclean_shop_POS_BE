@@ -9,7 +9,7 @@ class Workshop(models.Model):
 		verbose_name_plural='Workshops'
 
 	id=models.AutoField(primary_key=True)
-	user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='workshop')
+	
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='workshop')
 	workshop_name=models.CharField(max_length=200,null=True,blank=True)
 	workshop_address=models.CharField(max_length=400,null=True,blank=True)

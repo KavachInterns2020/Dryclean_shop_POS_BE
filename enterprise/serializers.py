@@ -11,7 +11,7 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 class EditProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Enterprise
-		fields=['contact_name','shop_name','shop_address','phone']
+		fields=['contact_name','shop_name','shop_address','phone','gst_number']
 
 class PaymentSerializer(serializers.ModelSerializer):
 	class Meta:

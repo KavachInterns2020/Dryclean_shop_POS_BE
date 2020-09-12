@@ -13,14 +13,14 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 class EmployeeView(LoginRequiredMixin,APIView):
 
 	def get(self, request, format=None):
-		employee = Employee.objects.all()
+		employee = self.request.user.enterprise.employee.all()
 		serializer = EmployeeSerializer(employee, many=True)
 		return Response(serializer.data)
 
 
 class EmployeeDetailView(LoginRequiredMixin,APIView):
 	def get(self, request,pk,format=None):
-		employees=Employee.objects.filter(id=pk)
+		employees=self.request.user.enterprise.employee.filter(id=pk)
 		serializer = EmployeeSerializer(employees,many=True)
 		return Response(serializer.data)
 
@@ -44,7 +44,8 @@ class EmployeeCreateView(generics.CreateAPIView):
 
 
 class EditEmployeeView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Employee.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.employee.all()
 	serializer_class = EmployeeCreateSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -55,14 +56,14 @@ class EditEmployeeView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gen
 
 class RoleView(LoginRequiredMixin,APIView):
 	def get(self, request, format=None):
-		role = Role.objects.all()
+		role = self.request.user.enterprise.role.all()
 		serializer = RoleSerializer(role, many=True)
 		return Response(serializer.data)
 
 
 class RoleDetailView(LoginRequiredMixin,APIView):
 	def get(self, request,pk,format=None):
-		roles=Role.objects.filter(id=pk)
+		roles=self.request.user.enterprise.role.filter(id=pk)
 		serializer =RoleSerializer(roles,many=True)
 		return Response(serializer.data)
 
@@ -84,7 +85,8 @@ class RoleCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 	
 class RoleEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Role.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.role.all()
 	serializer_class = RoleCreateSerializer
 
 	def put(self, request, *args, **kwargs):

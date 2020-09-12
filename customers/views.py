@@ -17,14 +17,14 @@ from django.core.mail import send_mail
 class CustomerView(LoginRequiredMixin,APIView):
 
 	def get(self, request, format=None):
-		customer = Customer.objects.all()
+		customer = self.request.user.enterprise.customer.all()
 		serializer = CustomerSerializer(customer, many=True)
 		return Response(serializer.data)
 
 class CustomerDetailView(LoginRequiredMixin,APIView):
 	def get(self, request,pk,format=None):
-		customers=Customer.objects.filter(id=pk)
-		serializer = CustomerSerializer(customers,many=True)
+		queryset=self.request.user.enterprise.customer.filter(id=pk)
+		serializer = CustomerSerializer(queryset,many=True)
 		return Response(serializer.data)
 
 
@@ -53,7 +53,8 @@ class CustomerCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EditCustomerView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Customer.objects.all()
+	def get_queryset(self):
+		return self.request.user.enterprise.customer.all()
 	serializer_class = CustomerSerializer
 
 	def put(self, request, *args, **kwargs):

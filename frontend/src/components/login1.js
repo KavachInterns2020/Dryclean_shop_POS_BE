@@ -57,6 +57,7 @@ class Login1 extends Component {
               },
               body:JSON.stringify(this.state)
             }).then((response)  => {
+                  console.log('success!')
                   
                   this.setState({
                     

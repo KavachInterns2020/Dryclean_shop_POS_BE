@@ -38,7 +38,8 @@ class CustomLoginSerializer(LoginSerializer):
 	def get_cleaned_data(self):
 		return{
 		
+		
+		'email':self.validated_data.get('email', ''),
 		'password':self.validated_data.get('password', ''),
-		'email':self.validated_data.get('email', '')
 
 		}

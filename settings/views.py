@@ -13,13 +13,19 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 class ProductTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
-	queryset = ProductType.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.product.all()
 	serializer_class = ProductTypeSerializer
 
 	def get(self, request,*args,**kwargs):
 		return self.list(request,*args,**kwargs)
 
 
+class ProductTypeDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		product=self.request.user.enterprise.product.filter(id=pk)
+		serializer = ProductTypeSerializer(product,many=True)
+		return Response(serializer.data)
 
 class ProductTypeCreateView(generics.CreateAPIView):
 	def get_serializer_class(self):
@@ -38,7 +44,8 @@ class ProductTypeCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = ProductType.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.product.all()
 	serializer_class = ProductTypeSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -51,13 +58,18 @@ class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,ge
 
 class ServiceTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 	
-	queryset = ServiceType.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.service.all()
 	serializer_class = ServiceTypeSerializer
 
 	def get(self, request,*args,**kwargs):
 		return self.list(request,*args,**kwargs)
 
-	
+class ServiceTypeDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		service=self.request.user.enterprise.service.filter(id=pk)
+		serializer = ServiceTypeSerializer(service,many=True)
+		return Response(serializer.data)	
 
 class ServiceTypeCreateView(generics.CreateAPIView):
 	def get_serializer_class(self):
@@ -76,7 +88,8 @@ class ServiceTypeCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteServiceType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = ServiceType.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.service.all()
 	serializer_class = ServiceTypeSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -90,12 +103,19 @@ class DeleteServiceType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,ge
 
 class PriorityView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
-	queryset = Priority.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.priority.all()
 	serializer_class = PrioritySerializer
 
 	def get(self, request,*args,**kwargs):
 		return self.list(request,*args,**kwargs)
 
+
+class PriorityDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		priority=self.request.user.enterprise.priority.filter(id=pk)
+		serializer = PrioritySerializer(priority,many=True)
+		return Response(serializer.data)
 
 class PriorityCreateView(generics.CreateAPIView):
 	def get_serializer_class(self):
@@ -114,7 +134,8 @@ class PriorityCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeletePriority(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Priority.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.priority.all()
 	serializer_class = PrioritySerializer
 
 	def put(self, request, *args, **kwargs):
@@ -125,13 +146,18 @@ class DeletePriority(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gener
 	
 
 class StatusView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	queryset = Status.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.status.all()
 	serializer_class = StatusSerializer
 
 	def get(self, request,*args,**kwargs):
 		return self.list(request,*args,**kwargs)
 
-
+class StatusDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		status=self.request.user.enterprise.status.filter(id=pk)
+		serializer = StatusSerializer(status,many=True)
+		return Response(serializer.data)
 
 class StatusCreateView(generics.CreateAPIView):
 
@@ -152,7 +178,8 @@ class StatusCreateView(generics.CreateAPIView):
 
 class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 
-	queryset = Status.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.status.all()
 	serializer_class = StatusCreateSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -163,12 +190,18 @@ class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gener
 
 
 class PaymentModeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	queryset = PaymentModes.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.payment_mode.all()
 	serializer_class = PaymentModeSerializer
 
 	def get(self, request,*args,**kwargs):
 		return self.list(request,*args,**kwargs)
 
+class PaymentModeDetailView(LoginRequiredMixin,APIView):
+	def get(self, request,pk,format=None):
+		payment_mode=self.request.user.enterprise.payment_mode.filter(id=pk)
+		serializer = PaymentModeSerializer(payment_mode,many=True)
+		return Response(serializer.data)
 
 class PaymentModeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
@@ -188,7 +221,8 @@ class PaymentModeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 	    
 class PaymentModeEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = PaymentModes.objects.all()
+	def get_queryset(self):
+		return self.user.enterprise.payment_mode.all()
 	serializer_class = PaymentModeCreateSerializer
 
 	def put(self, request, *args, **kwargs):

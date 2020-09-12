@@ -9,36 +9,31 @@ import rest_framework.mixins
 from rest_framework import generics
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin,ListModelMixin
-
+from django.shortcuts import get_list_or_404, get_object_or_404
 
 # Create your views here.
 class Profile(LoginRequiredMixin,APIView):
+	def get(self, request,format=None):
+		enterprise_id=self.request.user.enterprise.id
+		queryset=Enterprise.objects.filter(id=enterprise_id)
+		serializer = EnterpriseSerializer(queryset,many=True)
+		return Response(serializer.data)
 
-	def get_object(self, pk):
-	    try:
-	        return Enterprise.objects.get(pk=pk)
-	    except Enterprise.DoesNotExist:
-	        raise Http404
+	
 
-	def get(self, request, pk, format=None):
-	    enterprise = self.get_object(pk)
-	    serializer = EnterpriseSerializer(enterprise)
-	    return Response(serializer.data)
+class EditProfile(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	def get_queryset(self):
+		enterprise_id=self.request.user.enterprise.id
+		queryset=Enterprise.objects.filter(id=enterprise_id)
+		return queryset
 
-class EditProfile(LoginRequiredMixin,APIView):
-	def get_object(self,pk):
-		try:
-			return Enterprise.objects.get(pk=pk)
-		except Enterprise.DoesNotExist:
-			raise Http404
+	serializer_class=EditProfileSerializer
 
-	def put(self, request, pk, format=None):
-	    enterprise = self.get_object(pk)
-	    serializer = EditProfileSerializer(enterprise, data=request.data)
-	    if serializer.is_valid():
-	        serializer.save()
-	        return Response(serializer.data)
-	    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	def put(self, request, *args, **kwargs):
+		return self.update(request, *args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
 
 
 class PaymentView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
@@ -69,7 +64,9 @@ class PaymentCreateView(generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PaymentEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = Payments.objects.all()
+	def get_queryset(self):
+		queryset=self.request.user.enterprise.payments.all()
+		return queryset
 	serializer_class = PaymentCreateSerializer
 
 	def put(self, request, *args, **kwargs):

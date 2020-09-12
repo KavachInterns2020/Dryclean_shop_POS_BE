@@ -60,6 +60,7 @@ class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generi
 	def get_queryset(self):
 		queryset=self.request.user.enterprise.order.all()
 		return queryset
+
 	serializer_class = OrderCreateSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -67,6 +68,7 @@ class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generi
 		return self.update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
+		
 		return self.destroy(request, *args, **kwargs)
 
 class OrderItemView(LoginRequiredMixin,APIView):
@@ -119,19 +121,25 @@ class OrderItemCreateView(generics.CreateAPIView):
 
 		
 class EditOrderItemView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	queryset = OrderItem.objects.all()
+	def get_queryset(self):
+		queryset=self.request.user.enterprise.orderitem.all()
+		return queryset
 	serializer_class = OrderItemEditSerializer
 
 	def put(self, request, *args, **kwargs):
+		
 		return self.update(request, *args, **kwargs)
 
 	def delete(self, request, *args, **kwargs):
+		
 		return self.destroy(request, *args, **kwargs)	
 
 
 
 class StatusHistoryView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	queryset = StatusHistory.objects.all()
+	
+	def get_queryset(self):
+		return self.request.user.enterprise.statushistory.all()
 	serializer_class = StatusHistorySerializer
 
 	def get(self, request,*args,**kwargs):

@@ -15,7 +15,7 @@ class Order(models.Model):
 	id=models.AutoField(primary_key=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='order',blank=True,null=True)
 	customer=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='order',blank=True,null=True)
-	employee=models.ForeignKey(Employee,on_delete=models.CASCADE,related_name='order',blank=True,null=True)
+	#employee=models.ForeignKey(Employee,on_delete=models.CASCADE,related_name='order',blank=True,null=True)
 	
 	
 	advance_amount=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True)
