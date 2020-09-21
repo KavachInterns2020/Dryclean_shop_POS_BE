@@ -49,7 +49,7 @@ class PaymentDetailView(LoginRequiredMixin,APIView):
 		serializer =PaymentSerializer(payments,many=True)
 		return Response(serializer.data)
 
-class PaymentCreateView(generics.CreateAPIView):
+class PaymentCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:

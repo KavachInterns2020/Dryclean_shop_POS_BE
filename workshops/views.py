@@ -27,7 +27,7 @@ class WorkshopDetailView(LoginRequiredMixin,APIView):
 
 
 
-class WorkshopCreateView(generics.CreateAPIView):
+class WorkshopCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return WorkshopCreateSerializer
@@ -46,7 +46,7 @@ class WorkshopCreateView(generics.CreateAPIView):
 
 class EditWorkshopView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.workshop.all()
+		return self.request.user.enterprise.workshop.all()
 	serializer_class = WorkshopCreateSerializer
 
 	def put(self, request, *args, **kwargs):

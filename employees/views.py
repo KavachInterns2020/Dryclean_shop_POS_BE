@@ -26,7 +26,7 @@ class EmployeeDetailView(LoginRequiredMixin,APIView):
 
 
 
-class EmployeeCreateView(generics.CreateAPIView):
+class EmployeeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return EmployeeCreateSerializer
@@ -45,7 +45,7 @@ class EmployeeCreateView(generics.CreateAPIView):
 
 class EditEmployeeView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.employee.all()
+		return self.request.user.enterprise.employee.all()
 	serializer_class = EmployeeCreateSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -67,7 +67,7 @@ class RoleDetailView(LoginRequiredMixin,APIView):
 		serializer =RoleSerializer(roles,many=True)
 		return Response(serializer.data)
 
-class RoleCreateView(generics.CreateAPIView):
+class RoleCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
@@ -86,7 +86,7 @@ class RoleCreateView(generics.CreateAPIView):
 	
 class RoleEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.role.all()
+		return self.request.user.enterprise.role.all()
 	serializer_class = RoleCreateSerializer
 
 	def put(self, request, *args, **kwargs):

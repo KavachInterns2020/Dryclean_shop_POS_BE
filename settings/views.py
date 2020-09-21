@@ -14,7 +14,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 class ProductTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
 	def get_queryset(self):
-		return self.user.enterprise.product.all()
+		return self.request.user.enterprise.product.all()
 	serializer_class = ProductTypeSerializer
 
 	def get(self, request,*args,**kwargs):
@@ -27,7 +27,7 @@ class ProductTypeDetailView(LoginRequiredMixin,APIView):
 		serializer = ProductTypeSerializer(product,many=True)
 		return Response(serializer.data)
 
-class ProductTypeCreateView(generics.CreateAPIView):
+class ProductTypeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return ProductTypeSerializer
@@ -45,7 +45,7 @@ class ProductTypeCreateView(generics.CreateAPIView):
 
 class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.product.all()
+		return self.request.user.enterprise.product.all()
 	serializer_class = ProductTypeSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -59,7 +59,7 @@ class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,ge
 class ServiceTypeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 	
 	def get_queryset(self):
-		return self.user.enterprise.service.all()
+		return self.request.user.enterprise.service.all()
 	serializer_class = ServiceTypeSerializer
 
 	def get(self, request,*args,**kwargs):
@@ -71,7 +71,7 @@ class ServiceTypeDetailView(LoginRequiredMixin,APIView):
 		serializer = ServiceTypeSerializer(service,many=True)
 		return Response(serializer.data)	
 
-class ServiceTypeCreateView(generics.CreateAPIView):
+class ServiceTypeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return ServiceTypeSerializer
@@ -89,7 +89,7 @@ class ServiceTypeCreateView(generics.CreateAPIView):
 
 class DeleteServiceType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.service.all()
+		return self.request.user.enterprise.service.all()
 	serializer_class = ServiceTypeSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -104,7 +104,7 @@ class DeleteServiceType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,ge
 class PriorityView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
 	def get_queryset(self):
-		return self.user.enterprise.priority.all()
+		return self.request.user.enterprise.priority.all()
 	serializer_class = PrioritySerializer
 
 	def get(self, request,*args,**kwargs):
@@ -117,7 +117,7 @@ class PriorityDetailView(LoginRequiredMixin,APIView):
 		serializer = PrioritySerializer(priority,many=True)
 		return Response(serializer.data)
 
-class PriorityCreateView(generics.CreateAPIView):
+class PriorityCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return PrioritySerializer
@@ -135,7 +135,7 @@ class PriorityCreateView(generics.CreateAPIView):
 
 class DeletePriority(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.priority.all()
+		return self.request.user.enterprise.priority.all()
 	serializer_class = PrioritySerializer
 
 	def put(self, request, *args, **kwargs):
@@ -147,7 +147,7 @@ class DeletePriority(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gener
 
 class StatusView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.status.all()
+		return self.request.user.enterprise.status.all()
 	serializer_class = StatusSerializer
 
 	def get(self, request,*args,**kwargs):
@@ -159,7 +159,7 @@ class StatusDetailView(LoginRequiredMixin,APIView):
 		serializer = StatusSerializer(status,many=True)
 		return Response(serializer.data)
 
-class StatusCreateView(generics.CreateAPIView):
+class StatusCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
@@ -179,7 +179,7 @@ class StatusCreateView(generics.CreateAPIView):
 class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 
 	def get_queryset(self):
-		return self.user.enterprise.status.all()
+		return self.request.user.enterprise.status.all()
 	serializer_class = StatusCreateSerializer
 
 	def put(self, request, *args, **kwargs):
@@ -191,7 +191,7 @@ class StatusEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gener
 
 class PaymentModeView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.payment_mode.all()
+		return self.request.user.enterprise.payment_mode.all()
 	serializer_class = PaymentModeSerializer
 
 	def get(self, request,*args,**kwargs):
@@ -222,7 +222,7 @@ class PaymentModeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	    
 class PaymentModeEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	def get_queryset(self):
-		return self.user.enterprise.payment_mode.all()
+		return self.request.user.enterprise.payment_mode.all()
 	serializer_class = PaymentModeCreateSerializer
 
 	def put(self, request, *args, **kwargs):

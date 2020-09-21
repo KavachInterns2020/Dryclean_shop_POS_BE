@@ -1,8 +1,7 @@
 from django.db import models
 from users.managers import CustomUserManager
 from enterprise.models import Enterprise
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 # Create your models here
 
 class Customer(models.Model):

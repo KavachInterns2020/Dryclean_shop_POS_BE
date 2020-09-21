@@ -5,7 +5,6 @@ urlpatterns = [
 
 
 
-
  	path('product-type/',settings.views.ProductTypeView.as_view()),
     path('product-type/new/',settings.views.ProductTypeCreateView.as_view()),
     path('product-type/<int:pk>/',settings.views.ProductTypeDetailView.as_view()),

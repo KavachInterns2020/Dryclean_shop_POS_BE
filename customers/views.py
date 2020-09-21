@@ -29,7 +29,7 @@ class CustomerDetailView(LoginRequiredMixin,APIView):
 
 
 
-class CustomerCreateView(generics.CreateAPIView):
+class CustomerCreateView(LoginRequiredMixin,generics.CreateAPIView):
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return CustomerCreateSerializer
@@ -44,7 +44,7 @@ class CustomerCreateView(generics.CreateAPIView):
 			subject=f"Welcome to {self.request.user.enterprise.shop_name}"
 			message=f"Dear {obj.customer_name}\n Thank you for choosing our services.\n You can track your orders by clicking on the link\n"
 			message+= '<a href="https://google.com/">'
-			from_email=self.request.user.email
+			from_email=settings.EMAIL_HOST_USER
 			to_list=[obj.customer_email]
 			send_mail(subject,message,from_email,to_list,fail_silently=False)
 

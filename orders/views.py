@@ -40,7 +40,7 @@ class OrderDetailView(LoginRequiredMixin,APIView):
 
 
 
-class OrderCreateView(generics.CreateAPIView):
+class OrderCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
@@ -96,7 +96,7 @@ class OrderItemDetailView(LoginRequiredMixin,APIView):
 
 
 	
-class OrderItemCreateView(generics.CreateAPIView):
+class OrderItemCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
@@ -147,7 +147,7 @@ class StatusHistoryView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIVie
 
 	
 
-class StatusHistoryUpdateView(generics.CreateAPIView):
+class StatusHistoryUpdateView(LoginRequiredMixin,generics.CreateAPIView):
 
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
