@@ -4,7 +4,7 @@ from users.models import CustomUser
 from users.managers import CustomUserManager
 # Create your models here.
 class Logs(models.Model):
-
+	'''Server logs'''
 	class Meta:
 		verbose_name_plural='Logs'
 		

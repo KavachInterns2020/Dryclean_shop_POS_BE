@@ -4,11 +4,12 @@ from enterprise.models import Enterprise
 from customers.models import Customer
 from employees.models import Employee
 from settings.models import ProductType,ServiceType,Priority,Status
+from workshops.models import Workshop
 from django.core.exceptions import ObjectDoesNotExist
 # Create your models here.
 
 class Order(models.Model):
-
+	'''This models is for details regarding the orders taken by the drycleaner'''
 	class Meta:
 		verbose_name_plural = "Orders"
 
@@ -20,7 +21,7 @@ class Order(models.Model):
 	
 	advance_amount=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True)
 	
-	
+	#Total amount is calculated in the total_amount function and updated as more order items are added to the order
 	@property
 	def total_amount(self):
 		total=0
@@ -31,7 +32,7 @@ class Order(models.Model):
 		
 
 		return total
-
+	#Pending amount is calculated and updated as customer keeps paying advance amount or pays in installments
 	@property
 	def pending_amount(self):
 		if self.total_amount!=0:
@@ -51,7 +52,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-
+	'''This model is for the order items within each order'''
 	class Meta:
 		verbose_name_plural = "Order Items"
 
@@ -73,7 +74,7 @@ class OrderItem(models.Model):
 	
 	
 
-	
+	#Total amount field is calculated and updated as the product type, service type and priority are selected
 
 	@property
 	def total_amount(self):
@@ -88,7 +89,7 @@ class OrderItem(models.Model):
 		return f"{self.id} {self.enterprise}"
 
 class StatusHistory(models.Model):
-
+	'''This model is for details of the status of the order items i.e. whether the items are received, processing ,delivered etc.'''
 	class Meta:
 		verbose_name_plural = "Status History"
 
@@ -98,6 +99,7 @@ class StatusHistory(models.Model):
 	order_item=models.ForeignKey(OrderItem,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	status=models.ForeignKey(Status,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	#customer=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
+	workshop=models.ForeignKey(Workshop,on_delete=models.CASCADE,related_name='statushistory',blank=True,null=True)
 	quantity=models.IntegerField()
 	date_of_update=models.DateField()
 

@@ -12,7 +12,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 # Create your views here.
 class WorkshopView(LoginRequiredMixin,APIView):
-
+	'''GET, displays all worksops of the logged in user'''
 	def get(self, request, format=None):
 		workshop = self.request.user.enterprise.workshop.all()
 		serializer = WorkshopSerializer(workshop, many=True)
@@ -20,6 +20,7 @@ class WorkshopView(LoginRequiredMixin,APIView):
 
 
 class WorkshopDetailView(LoginRequiredMixin,APIView):
+	'''GET, displays individual workshop '''
 	def get(self, request,pk,format=None):
 		workshop=self.request.user.enterprise.workshop.filter(id=pk)
 		serializer = WorkshopSerializer(workshop,many=True)
@@ -28,6 +29,7 @@ class WorkshopDetailView(LoginRequiredMixin,APIView):
 
 
 class WorkshopCreateView(LoginRequiredMixin,generics.CreateAPIView):
+	'''POST, create new workshop'''
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return WorkshopCreateSerializer
@@ -45,6 +47,7 @@ class WorkshopCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 
 class EditWorkshopView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	'''PUT,DELETE, edit or delete workshop'''
 	def get_queryset(self):
 		return self.request.user.enterprise.workshop.all()
 	serializer_class = WorkshopCreateSerializer

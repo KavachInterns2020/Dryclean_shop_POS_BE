@@ -15,6 +15,7 @@ from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin,ListModelMi
 
 # Create your views here.
 class OrderView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	'''GET, displays all orders taken by the logged in user'''
 	def get_queryset(self):
 		return self.request.user.enterprise.order.all()
 	#queryset=Order.objects.all()
@@ -25,7 +26,7 @@ class OrderView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 
 
 class OrderDetailView(LoginRequiredMixin,APIView):
-
+	'''GET, displays individual orders taken by the loggedin user'''
 	def get(self, request,pk,format=None):
 		
 		queryset=self.request.user.enterprise.order.filter(id=pk)
@@ -41,7 +42,7 @@ class OrderDetailView(LoginRequiredMixin,APIView):
 
 
 class OrderCreateView(LoginRequiredMixin,generics.CreateAPIView):
-
+	'''POST, creates new orders'''
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return OrderCreateSerializer
@@ -57,6 +58,7 @@ class OrderCreateView(LoginRequiredMixin,generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	'''PUT,DELETE, edits or deletes orders'''
 	def get_queryset(self):
 		queryset=self.request.user.enterprise.order.all()
 		return queryset
@@ -72,7 +74,7 @@ class OrderEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generi
 		return self.destroy(request, *args, **kwargs)
 
 class OrderItemView(LoginRequiredMixin,APIView):
-	
+	'''GET, displays all the order items of a particular order'''
 	def get(self, request,pk,format=None):
 		
 		#pk = self.kwargs.get('pk')
@@ -85,7 +87,7 @@ class OrderItemView(LoginRequiredMixin,APIView):
 		return Response(serializer.data)
 
 class OrderItemDetailView(LoginRequiredMixin,APIView):
-
+	'''GET, displays individual order items of a particular order'''
 	def get(self, request,pk,pk_alt,format=None):
 		
 		#pk = self.kwargs.get('pk')
@@ -97,7 +99,7 @@ class OrderItemDetailView(LoginRequiredMixin,APIView):
 
 	
 class OrderItemCreateView(LoginRequiredMixin,generics.CreateAPIView):
-
+	'''POST,creates new order items within a particular order'''
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return OrderItemCreateSerializer
@@ -108,7 +110,7 @@ class OrderItemCreateView(LoginRequiredMixin,generics.CreateAPIView):
 		#pk=self.kwargs.get('pk')
 		
 		if serializer.is_valid():
-			Order_ = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+			Order_ = get_object_or_404(Order, pk=self.kwargs.get('pk')) #order field is automatically filled with the pk value in the URL
 			serializer.save(enterprise=self.request.user.enterprise,order=Order_)
 			
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -121,6 +123,7 @@ class OrderItemCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 		
 class EditOrderItemView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	'''PUT,DELETE, edits or deletes order items'''
 	def get_queryset(self):
 		queryset=self.request.user.enterprise.orderitem.all()
 		return queryset
@@ -137,7 +140,7 @@ class EditOrderItemView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,ge
 
 
 class StatusHistoryView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	
+	'''GET, displays status history'''
 	def get_queryset(self):
 		return self.request.user.enterprise.statushistory.all()
 	serializer_class = StatusHistorySerializer
@@ -148,7 +151,7 @@ class StatusHistoryView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIVie
 	
 
 class StatusHistoryUpdateView(LoginRequiredMixin,generics.CreateAPIView):
-
+	'''POST, creates a new update for the status history'''
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return StatusHistoryUpdateSerializer
@@ -158,7 +161,7 @@ class StatusHistoryUpdateView(LoginRequiredMixin,generics.CreateAPIView):
 		
 		
 		if serializer.is_valid():
-			Orderitem_ = get_object_or_404(OrderItem, pk=self.kwargs.get('pk_alt'))
+			Orderitem_ = get_object_or_404(OrderItem, pk=self.kwargs.get('pk_alt')) #order item field is automatically filled using pk_alt in the URL
 			order_=get_object_or_404(Order,pk=self.kwargs.get('pk'))
 			#customer_=get_object_or_404(Customer,pk=order_.customer.id)
 			

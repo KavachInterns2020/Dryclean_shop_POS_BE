@@ -5,7 +5,7 @@ from enterprise.models import Enterprise
 
 # Create your models here.
 class Role(models.Model):
-
+	'''This model class creates a Role table in the database for storing employee roles'''
 	class Meta:
 
 		verbose_name_plural='Roles'
@@ -14,12 +14,13 @@ class Role(models.Model):
 	id=models.AutoField(primary_key=True)
 	enterprise=models.ForeignKey(Enterprise,on_delete=models.CASCADE,related_name='role',blank=True,null=True)
 	role_name=models.CharField(max_length=100)
-	objects=CustomUserManager()
+	objects=CustomUserManager() #since we have used custom user and manager all the model classes are appended with this line
 
 	def __str__(self):
 		return f"{self.id} {self.enterprise} {self.role_name}"
 
 class Employee(models.Model):
+	'''This model class creates Employee table in the database to store employee details'''
 
 	class Meta:
 		verbose_name_plural = "Employees"

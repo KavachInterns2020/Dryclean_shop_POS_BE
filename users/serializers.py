@@ -8,13 +8,13 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import LoginSerializer
 
 class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'email']
+	'''Overwriting django's in built user serializer to serialize CustomUser model and provode fields id and email'''
+	class Meta:
+		model = CustomUser
+		fields = ['id', 'email']
 
 class CustomRegisterSerializer(RegisterSerializer):
-	
+	'''Overwriting rest-auth app's default register serializer to include fields of our choice'''
 	contact_name=serializers.CharField(max_length=200,default="none")
 	phone=serializers.CharField(max_length=10,default="9999999999")
 	shop_name=serializers.CharField(max_length=200,default="none")
@@ -35,6 +35,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 	    }
 
 class CustomLoginSerializer(LoginSerializer):
+	'''Overwriting rest-auth's default login serializer to display fields of our choice'''
 	def get_cleaned_data(self):
 		return{
 		

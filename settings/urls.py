@@ -1,6 +1,33 @@
 from django.urls import path
 import settings.views
 
+''' The path 'product-type/' corresponds to the GET request for all product types
+    The path 'product-type/<int:pk>/' corresponds to  GET request for individual product type
+    The path 'product-type/new/' corresponds to POST request for creating new product types
+    The path 'product-type/<int:pk>/edit/' corresponds to both PUT and DELETE requests to edit or delete the product type
+
+    The path 'service-type/' corresponds to the GET request for all service types
+    The path 'service-type/<int:pk>/' corresponds to  GET request for individual service type
+    The path 'service-type/new/' corresponds to POST request for creating new service types
+    The path 'service-type/<int:pk>/edit/' corresponds to both PUT and DELETE requests to edit or delete the service type
+
+    The path 'priority/' corresponds to the GET request for all priorities
+    The path 'priority/<int:pk>/' corresponds to  GET request for individual priority
+    The path 'priority/new/' corresponds to POST request for creating new priority
+    The path 'priority/<int:pk>/edit/' corresponds to both PUT and DELETE requests to edit or delete the priority
+
+    The path 'status/' corresponds to the GET request for all statuses
+    The path 'status/<int:pk>/' corresponds to  GET request for individual status
+    The path 'status/new/' corresponds to POST request for creating new status
+    The path 'status/<int:pk>/edit/' corresponds to both PUT and DELETE requests to edit or delete the status
+
+    The path 'paymentmodes/' corresponds to the GET request for all payment modes
+    The path 'paymentmodes/<int:pk>/' corresponds to  GET request for individual payment mode
+    The path 'paymentmodes/new/' corresponds to POST request for creating new payment mode
+    The path 'paymentmodes/<int:pk>/edit/' corresponds to both PUT and DELETE requests to edit or delete the payment modes
+
+'''
+
 urlpatterns = [	
 
 

@@ -6,12 +6,13 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
+	'''CustomUser model overwrites django's user model and makes the email field mandatory instead of the username field'''
 	username=None
 	email=models.EmailField(_('email address'),unique=True)
 	USERNAME_FIELD='email'
 	REQUIRED_FIELDS=[]
 
-	objects=CustomUserManager()
+	objects=CustomUserManager() 
 
 	def __str__(self):
 		return self.email

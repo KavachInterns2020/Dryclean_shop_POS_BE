@@ -13,6 +13,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 # Create your views here.
 class Profile(LoginRequiredMixin,APIView):
+	'''GET, displays the enterprise details'''
 	def get(self, request,format=None):
 		enterprise_id=self.request.user.enterprise.id
 		queryset=Enterprise.objects.filter(id=enterprise_id)
@@ -22,6 +23,7 @@ class Profile(LoginRequiredMixin,APIView):
 	
 
 class EditProfile(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	'''PUT,DELETE, to edit or delete enterprise details. Upon deletion all records related to the user are deleted'''
 	def get_queryset(self):
 		enterprise_id=self.request.user.enterprise.id
 		queryset=Enterprise.objects.filter(id=enterprise_id)
@@ -37,6 +39,7 @@ class EditProfile(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics
 
 
 class PaymentView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
+	'''GET, displays all the payment records'''
 	queryset = Payments.objects.all()
 	serializer_class = PaymentSerializer
 
@@ -44,13 +47,14 @@ class PaymentView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
 		return self.list(request,*args,**kwargs)
 
 class PaymentDetailView(LoginRequiredMixin,APIView):
+	'''GET,Displays individual payment record'''
 	def get(self, request,pk,format=None):
 		payments=Payments.objects.filter(id=pk)
 		serializer =PaymentSerializer(payments,many=True)
 		return Response(serializer.data)
 
 class PaymentCreateView(LoginRequiredMixin,generics.CreateAPIView):
-
+	'''POST, Creates new payment records'''
 	def get_serializer_class(self):
 	    if self.request.user.is_authenticated:
 	        return PaymentCreateSerializer
@@ -64,6 +68,7 @@ class PaymentCreateView(LoginRequiredMixin,generics.CreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PaymentEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
+	'''PUT,DELETE, edit or delete payment records'''
 	def get_queryset(self):
 		queryset=self.request.user.enterprise.payments.all()
 		return queryset

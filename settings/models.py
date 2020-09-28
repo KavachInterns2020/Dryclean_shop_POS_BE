@@ -6,7 +6,7 @@ from enterprise.models import Enterprise
 
 
 class ProductType(models.Model):
-
+	'''This mocel is for product types (eg. shirt,pant,saree etc.)'''
 	class Meta:
 		verbose_name_plural = "Product types"
 
@@ -20,7 +20,7 @@ class ProductType(models.Model):
 		return f"{self.id}- {self.product_type_name} {self.enterprise}"
 
 class ServiceType(models.Model):
-
+	'''This model is for service types (eg. drycleaning, petrol wash, darning etc.)'''
 	class Meta:
 		verbose_name_plural = "Service types"
 
@@ -36,7 +36,7 @@ class ServiceType(models.Model):
 
 
 class Priority(models.Model):
-
+	'''This model is for priorities(eg. normal,urgent etc.)'''
 	class Meta:
 		verbose_name_plural = "Priorities"
 
@@ -69,7 +69,7 @@ class Priority(models.Model):
 		return f"{self.id}  {self.product} {self.service} {self.priority} {self.price} {self.enterprise}"'''
 
 class PaymentModes(models.Model):
-
+	'''This model is for payment modes(eg. credit card, cash, UPI etc.)'''
 	class Meta:
 		verbose_name_plural="Payment modes"
 
@@ -82,6 +82,7 @@ class PaymentModes(models.Model):
 		return f"{self.id}  {self.payment_mode_name}"
 
 class Status(models.Model):
+	'''This model is for statuses (eg. Collected at workshop, sent to wash at workshop , delivered to customer etc.)'''
 	class Meta:
 		verbose_name_plural="Status"
 

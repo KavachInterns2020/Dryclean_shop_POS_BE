@@ -5,6 +5,7 @@ from users.managers import CustomUserManager
 
 # Create your models here.
 class Workshop(models.Model):
+	'''Stores details of workshops related to the drycleanshop'''
 	class Meta:
 		verbose_name_plural='Workshops'
 
