@@ -7,7 +7,7 @@ from employees.models import Employee,Role
 from orders.models import Order,OrderItem,StatusHistory
 from logs.models import Logs
 from workshops.models import Workshop
-
+from payments.models import Payments
 admin.site.register(CustomUser)
 admin.site.register(Enterprise)
 admin.site.register(ProductType)
@@ -23,3 +23,4 @@ admin.site.register(OrderItem)
 admin.site.register(Logs)
 admin.site.register(Workshop)
 admin.site.register(StatusHistory)
+admin.site.register(Payments)
