@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from enterprise.models import Enterprise,Payments
-from enterprise.serializers import EnterpriseSerializer,EditProfileSerializer,PaymentSerializer,PaymentCreateSerializer
+from enterprise.models import Enterprise
+from enterprise.serializers import EnterpriseSerializer,EditProfileSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -38,44 +38,3 @@ class EditProfile(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics
 		return self.destroy(request, *args, **kwargs)
 
 
-class PaymentView(LoginRequiredMixin,ListModelMixin,generics.GenericAPIView):
-	'''GET, displays all the payment records'''
-	queryset = Payments.objects.all()
-	serializer_class = PaymentSerializer
-
-	def get(self, request,*args,**kwargs):
-		return self.list(request,*args,**kwargs)
-
-class PaymentDetailView(LoginRequiredMixin,APIView):
-	'''GET,Displays individual payment record'''
-	def get(self, request,pk,format=None):
-		payments=Payments.objects.filter(id=pk)
-		serializer =PaymentSerializer(payments,many=True)
-		return Response(serializer.data)
-
-class PaymentCreateView(LoginRequiredMixin,generics.CreateAPIView):
-	'''POST, Creates new payment records'''
-	def get_serializer_class(self):
-	    if self.request.user.is_authenticated:
-	        return PaymentCreateSerializer
-	    return Response(serializer.errors,status=Http404)
-
-	def perform_create(self, serializer, **kwargs):
-		
-		if serializer.is_valid():
-			serializer.save(enterprise=self.request.user.enterprise)
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class PaymentEditView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
-	'''PUT,DELETE, edit or delete payment records'''
-	def get_queryset(self):
-		queryset=self.request.user.enterprise.payments.all()
-		return queryset
-	serializer_class = PaymentCreateSerializer
-
-	def put(self, request, *args, **kwargs):
-		return self.update(request, *args, **kwargs)
-
-	def delete(self, request, *args, **kwargs):
-		return self.destroy(request, *args, **kwargs)

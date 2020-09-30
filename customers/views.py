@@ -61,7 +61,7 @@ class EditCustomerView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,gen
 	'''This API view allows EDIT and DELETE requests'''
 	def get_queryset(self,):
 		return self.request.user.enterprise.customer.all() #selects the customer to be edited or deleted
-	serializer_class = CustomerSerializer
+	serializer_class = CustomerCreateSerializer
 	#Method to edit the customer details
 	def put(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)

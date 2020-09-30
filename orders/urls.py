@@ -25,5 +25,6 @@ urlpatterns = [
 	    path('<int:pk>/order-items/new/',orders.views.OrderItemCreateView.as_view()),
 	    path('<int:pk>/order-items/<int:pk_alt>/edit/',orders.views.EditOrderItemView.as_view()),
 	    path('<int:pk>/order-items/<int:pk_alt>/status-history/',orders.views.StatusHistoryView.as_view()),
-	    path('<int:pk>/order-items/<int:pk_alt>/status-history/update-status/',orders.views.StatusHistoryUpdateView.as_view())
+	    path('<int:pk>/order-items/<int:pk_alt>/status-history/update-status/',orders.views.StatusHistoryUpdateView.as_view()),
+	   
     ]

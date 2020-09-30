@@ -47,8 +47,10 @@ class ProductTypeCreateView(LoginRequiredMixin,generics.CreateAPIView):
 
 class DeleteProductType(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	'''PUT,DELETE, to edit or delete product types'''
-	def get_queryset(self):
-		return self.request.user.enterprise.product.all()
+	def get_queryset(self,pk):
+		
+		return self.request.user.enterprise.product.filter(id=pk)
+
 	serializer_class = ProductTypeSerializer
 
 	def put(self, request, *args, **kwargs):

@@ -18,3 +18,6 @@ class Workshop(models.Model):
 	workshop_email=models.EmailField(null=True,blank=True)
 
 	objects = CustomUserManager()
+
+	def __str__(self):
+		return f"{self.id} {self.workshop_name} {self.enterprise}" 

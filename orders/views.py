@@ -125,10 +125,12 @@ class OrderItemCreateView(LoginRequiredMixin,generics.CreateAPIView):
 class EditOrderItemView(LoginRequiredMixin,UpdateModelMixin,DestroyModelMixin,generics.GenericAPIView):
 	'''PUT,DELETE, edits or deletes order items'''
 	def get_queryset(self):
-		queryset=self.request.user.enterprise.orderitem.all()
+		pk_alt=self.kwargs['pk_alt']
+		queryset=self.request.user.enterprise.orderitem.filter(id=pk_alt)
 		return queryset
 	serializer_class = OrderItemEditSerializer
 
+	lookup_url_kwarg='pk_alt' #this is used because put and update methods cannot differentiate between the two keys in the URL
 	def put(self, request, *args, **kwargs):
 		
 		return self.update(request, *args, **kwargs)
@@ -169,8 +171,6 @@ class StatusHistoryUpdateView(LoginRequiredMixin,generics.CreateAPIView):
 			
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 

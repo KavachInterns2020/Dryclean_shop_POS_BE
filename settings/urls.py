@@ -41,7 +41,7 @@ urlpatterns = [
     path('service-type/<int:pk>/',settings.views.ServiceTypeDetailView.as_view()),
     path('service-type/<int:pk>/edit/', settings.views.DeleteServiceType.as_view()),
     path('priority/',settings.views.PriorityView.as_view()),
-    path('priority/new/',settings.views.PriorityView.as_view()),
+    path('priority/new/',settings.views.PriorityCreateView.as_view()),
     path('priority/<int:pk>/',settings.views.PriorityDetailView.as_view()),
     path('priority/<int:pk>/edit/', settings.views.DeletePriority.as_view()),
     path('status/',settings.views.StatusView.as_view()),
